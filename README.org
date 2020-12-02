@@ -31,4 +31,12 @@ If no output file is given, i3rec will save the file as =yy-mm-dd(1).mp4= in the
 | =--framerate <num>=   | Set video framerate (default=25)                    |
 | =--display <display>= | Set x11 display to record from (default=0:0)        |
 
+#+begin_src text 
+bindsym $mod+Print exec i3rec --show_region
+bindsym $mod+Shift+Print exec "echo | dmenu | xargs i3rec --show_region"  
+#+end_src
+
+1. Executes i3rec on $mod+print with region outline 
+2. Specify filename via dmenu
+
 Requires the =i3ipc-python= package and =ffmpeg=. 

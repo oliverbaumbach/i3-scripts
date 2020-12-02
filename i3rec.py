@@ -1,3 +1,4 @@
+#!/home/user/scripts/i3/i3env/bin/python 
 """i3rec focused window recorder 
 
 This script is designed to let "ffmpeg x11-grab" record the contents of the currently focused window. It is intended to be bound to an i3 keybinding.  
@@ -16,15 +17,15 @@ import argparse
 from datetime import date 
 
 PID_FILE = "/tmp/i3rec.pid"
-DEFAULT_OUTPUT_DIR ="/home/user/"
+DEFAULT_OUTPUT_DIR ="/home/user/scratch/"
 
-def generate_default_filename():
+def generate_default_filename(directory):
     """Generates a default filename of the form ~/2020_12_01_1.mp4"""
     today = date.today()
-    output = os.path.join(DEFAULT_OUTPUT_DIR, f"{today.strftime('%Y_%m_%d')}.mp4")
+    output = f"{today.strftime('%Y_%m_%d')}.mp4"
     i = 0
-    while os.path.isfile(output):
-        output = os.path.join(DEFAULT_OUTPUT_DIR,f"{today.strftime('%Y_%m_%d')}_{i}.mp4")
+    while os.path.isfile(os.path.join(directory,output)):
+        output = f"{today.strftime('%Y_%m_%d')}_{i}.mp4"
         i += 1
     return output
 
@@ -64,12 +65,18 @@ if __name__ == "__main__":
         i3 = i3ipc.Connection()
         focused = i3.get_tree().find_focused()
 
-        # create output filename if none is given 
-        if args.output_file:
+        # create output filename if none is given
+        base, fn = os.path.split(args.output_file)
+        if base and fn:
             output = args.output_file
+        elif base:
+            output = os.path.join(base, generate_default_filename(base))
+        elif fn:
+            output = os.path.join(DEFAULT_OUTPUT_DIR, fn)
         else:
-            output = generate_default_filename()
-            
+            output = os.path.join(DEFAULT_OUTPUT_DIR,
+                                  generate_default_filename(DEFAULT_OUTPUT_DIR))
+                                  
         
         sp_args = ["ffmpeg",
                    "-y",
