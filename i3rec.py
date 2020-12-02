@@ -5,10 +5,9 @@ This script is designed to let "ffmpeg x11-grab" record the contents of the curr
 This script requires that `i3ipc-python` and ffmpeg are installed. 
 
 Usage: 
-> i3rec output.mp4 [--draw_mouse] [--show_region] [--framerate 25] [--display 0:0] 
+> i3rec output.mp4 [--draw_mouse] [--show_region] [--framerate 25] [--display 0.0] 
 
 """
-
 import i3ipc
 import subprocess
 import os 
@@ -19,28 +18,38 @@ from datetime import date
 PID_FILE = "/tmp/i3rec.pid"
 DEFAULT_OUTPUT_DIR ="~/"
 
-if __name__ = "__main__":
+def generate_default_filename():
+    """Generates a default filename of the form ~/2020-12-01(1).mp4"""
+    today = date.today()
+    output = f"{DEFAULT_OUTPUT_DIR}{today.strftime('%Y_%m_%d')}.mp4"
+    i = 0
+    while os.path.isfile(output):
+        output = f"{DEFAULT_OUTPUT_DIR}{today.strftime('%Y_%m_%d')}({i}).mp4"
+        i += 1
+    return output
+
+
+if __name__ == "__main__":
     # argparse configuration 
     parser = argparse.ArgumentParser(description="Record focused i3 window")
     parser.add_argument("output_file",
                         nargs="?", 
                         help="file to write to")
     parser.add_argument("--draw_mouse",
-                        action="store_true"
+                        action="store_true",
                         help="show mouse pointer in output")
     parser.add_argument("--show_region",
-                        action="store_true"
+                        action="store_true",
                         help="show border around recording region")
     parser.add_argument("--framerate",
-                        type=int
-                        help="video framerate"
-                        action="store_const"
-                        const=25
+                        help="video framerate",
+                        nargs="?",
+                        default=25
                         ) 
     parser.add_argument("--display",
-                        action="store_const",
-                        help="x11 display to capture from"
-                        const="0:0") 
+                        nargs="?",
+                        help="x11 display to capture from",
+                        default="0.0") 
     
     args = parser.parse_args()
     # if script has started ffmpeg already, stop ffmpeg 
@@ -62,26 +71,18 @@ if __name__ = "__main__":
             output = generate_default_filename() 
         
         sp_args = ["ffmpeg",
-                   "-video_size", f"{focused.rect.width}x{focused.rect.height}"
-                   "-framerate", f"{args.framerate}"
+                   "-y",
+                   "-video_size", f"{focused.rect.width}x{focused.rect.height}",
+                   "-framerate", f"{args.framerate}",
+                   "-draw_mouse", f"{int(args.draw_mouse)}",
+                   "-show_region", f"{int(args.show_region)}",
                    "-f", "x11grab",
-                   "--draw_mouse", f"{int(args.draw_mouse)}",
-                   "--show_region", f"{int(args.show_region)}",
-                   "-i", f"{args.display}+{focused.rect.x},{focused.rect.y}",
+                   "-i", f":{args.display}+{focused.rect.x},{focused.rect.y} ",
                    output 
                    ]
-
+        
         # start ffmpeg x11grab and write its pid to temp file
-        ffmpeg = subprocess.Popen(sp_args)
+        ffmpeg = subprocess.Popen(sp_args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         with open(PID_FILE, 'w') as f:
-            f.write(ffmpeg.pid)
+            f.write(str(ffmpeg.pid))
 
-def generate_default_filename():
-    """Generates a default filename of the form ~/2020-12-01(1).mp4"""
-    today = date.today()
-    output = f"{DEFAULT_OUTPUT_DIR}{today.strftime('%y-%m-%d')}.mp4"
-    i = 0
-    while os.path.isfile(output):
-        output = f"{DEFAULT_OUTPUT_DIR}{today.strftime('%y-%m-%d')}({i}).mp4"
-        i += 1
-    return output

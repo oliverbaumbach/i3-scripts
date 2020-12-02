@@ -16,7 +16,7 @@ bindsym $mod+Shift+dead_circumflex exec "i3-list-workspaces | dmenu | xargs i3-m
 
 Requires the =i3ipc-python= package.
 ** i3rec.py 
-=i3rec.py= is a script to allow ffmpeg x11grab to record the currently focused container in i3. It is designed to be bound to an i3 keybinding. Calling the script once will start the recording, calling the script again will stop it. 
+=i3rec.py= is a script to allow =ffmpeg x11grab= to record the currently focused container in i3. It is designed to be bound to an i3 keybinding. Calling the script once will start the recording, calling the script again will stop it. 
 
 #+begin_src text 
 > i3rec <output.mp4> [options] 
@@ -31,4 +31,4 @@ If no output file is given, i3rec will save the file as =yy-mm-dd(1).mp4= in the
 | =--framerate <num>=   | Set video framerate (default=25)                    |
 | =--display <display>= | Set x11 display to record from (default=0:0)        |
 
-Requires =i3ipc-python= package and =ffmpeg=. 
+Requires the =i3ipc-python= package and =ffmpeg=. 
