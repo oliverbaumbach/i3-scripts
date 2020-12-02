@@ -22,7 +22,7 @@ Requires the =i3ipc-python= package.
 > i3rec <output.mp4> [options] 
 #+end_src
 
-If no output file is given, i3rec will save the file as =yy-mm-dd(1).mp4= in the default directory specified within the script. 
+If no output file path is given, i3rec will save the file as =yy-mm-dd(1).mp4= in the default directory specified within the script. If only a filename or path is given, i3rec will fill the missing value with its defaults. 
 
 | Option                | Behaviour                                           |
 |-----------------------+-----------------------------------------------------|
@@ -36,7 +36,7 @@ bindsym $mod+Print exec i3rec --show_region
 bindsym $mod+Shift+Print exec "echo | dmenu | xargs i3rec --show_region"  
 #+end_src
 
-1. Executes i3rec on $mod+print with region outline 
+1. Executes i3rec on =$mod+Print= with region outline 
 2. Specify filename via dmenu
 
 Requires the =i3ipc-python= package and =ffmpeg=. 
