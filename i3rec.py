@@ -16,15 +16,15 @@ import argparse
 from datetime import date 
 
 PID_FILE = "/tmp/i3rec.pid"
-DEFAULT_OUTPUT_DIR ="~/"
+DEFAULT_OUTPUT_DIR ="/home/user/"
 
 def generate_default_filename():
-    """Generates a default filename of the form ~/2020-12-01(1).mp4"""
+    """Generates a default filename of the form ~/2020_12_01_1.mp4"""
     today = date.today()
-    output = f"{DEFAULT_OUTPUT_DIR}{today.strftime('%Y_%m_%d')}.mp4"
+    output = os.path.join(DEFAULT_OUTPUT_DIR, f"{today.strftime('%Y_%m_%d')}.mp4")
     i = 0
     while os.path.isfile(output):
-        output = f"{DEFAULT_OUTPUT_DIR}{today.strftime('%Y_%m_%d')}({i}).mp4"
+        output = os.path.join(DEFAULT_OUTPUT_DIR,f"{today.strftime('%Y_%m_%d')}_{i}.mp4")
         i += 1
     return output
 
@@ -68,7 +68,8 @@ if __name__ == "__main__":
         if args.output_file:
             output = args.output_file
         else:
-            output = generate_default_filename() 
+            output = generate_default_filename()
+            
         
         sp_args = ["ffmpeg",
                    "-y",
@@ -80,9 +81,9 @@ if __name__ == "__main__":
                    "-i", f":{args.display}+{focused.rect.x},{focused.rect.y} ",
                    output 
                    ]
+
         
         # start ffmpeg x11grab and write its pid to temp file
         ffmpeg = subprocess.Popen(sp_args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         with open(PID_FILE, 'w') as f:
             f.write(str(ffmpeg.pid))
-
