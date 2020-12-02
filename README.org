@@ -1,0 +1,34 @@
+* i3 Scripts 
+This repository contains a number of different utility scripts used by my i3-wm configuration. 
+
+** i3-list-workspaces.py 
+=i3-list-workspaces.py= outputs all existing workspaces when called. It's primarily used with the below two bindings that allow switching between named workspaces.
+
+The key choice reflects the German QWERTZ keyboard I use, as =dead_circumflex= is to the left of the =1= key. On a QWERTY keyboard, this key would be =dead_grave=. 
+
+#+begin_src text 
+bindsym $mod+dead_circumflex exec "i3-list-workspaces | dmenu | xargs i3-msg workspace"
+bindsym $mod+Shift+dead_circumflex exec "i3-list-workspaces | dmenu | xargs i3-msg move container to workspace"
+#+end_src
+
+1. Pipes list of workspaces into dmenu, and switches to selected workspace. If non-existing workspace is entered, it creates that workspace instead. 
+2. Same principle, but moves active container to workspace instead. 
+
+Requires the =i3ipc-python= package.
+** i3rec.py 
+=i3rec.py= is a script to allow ffmpeg x11grab to record the currently focused container in i3. It is designed to be bound to an i3 keybinding. Calling the script once will start the recording, calling the script again will stop it. 
+
+#+begin_src text 
+> i3rec <output.mp4> [options] 
+#+end_src
+
+If no output file is given, i3rec will save the file as =yy-mm-dd(1).mp4= in the default directory specified within the script. 
+
+| Option                | Behaviour                                           |
+|-----------------------+-----------------------------------------------------|
+| =--draw_mouse=        | Draw the mouse pointer (default=false)              |
+| =--show_region=       | Show border around recording region (default=false) |
+| =--framerate <num>=   | Set video framerate (default=25)                    |
+| =--display <display>= | Set x11 display to record from (default=0:0)        |
+
+Requires =i3ipc-python= package and =ffmpeg=. 
