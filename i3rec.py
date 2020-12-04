@@ -66,7 +66,7 @@ if __name__ == "__main__":
         focused = i3.get_tree().find_focused()
 
         # create output filename if none is given
-        base, fn = os.path.split(args.output_file)
+        base, fn = os.path.split(args.output_file or "")
         if base and fn:
             output = args.output_file
         elif base:
