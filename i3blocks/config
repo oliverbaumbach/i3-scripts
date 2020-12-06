@@ -1,0 +1,61 @@
+full_text="|"
+align=center
+color=#AAAAAA
+separator=false
+separator_block_width=3
+
+[comp_status]
+command=/home/user/scripts/i3blocks/system_monitor.py
+interval=1
+markup=pango
+color=#FFFFFF
+
+[sep]
+
+[weather]
+command=curl "wttr.in/Berlin?format=%cℝ%t%20𝕀%f\n"
+interval=3600
+color=#FFFFFF
+
+[sep]
+
+[mpc_prev]
+full_text=""
+command=mpc prev -q 
+color=#EEEEEE
+
+[mpc_toggle]
+command=/home/user/scripts/i3blocks/mpc_toggle.py 
+interval=once
+color=#EEEEEE
+
+[mpc_next]
+full_text=""
+command=mpc next -q
+color=#EEEEEE
+
+[mpc_title]
+full_text=" <span font='8'>                    </span>"
+command=/home/user/scripts/i3blocks/mpc_title.py 20
+interval=persist
+markup=pango
+
+[sep]
+
+[mute]
+command=/home/user/scratch/i3blocks/volume_toggle.py
+interval=once
+color=#AFAFAF
+
+[volume-slider]
+command=/home/user/scripts/i3blocks/volume_slider.py 30
+interval=1
+markup=pango
+
+[sep]
+
+[date_time]
+command=date +"<span foreground='#aaaaaa'>%^a%d</span>%R"
+interval=1
+markup=pango
+color=#FFFFFF

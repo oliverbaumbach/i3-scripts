@@ -36,7 +36,69 @@ bindsym $mod+Print exec i3rec --show_region
 bindsym $mod+Shift+Print exec "echo | dmenu | xargs i3rec --show_region"  
 #+end_src
 
-1. Executes i3rec on =$mod+Print= with region outline 
+1. Executes =i3rec= on =$mod+Print= with region outline 
 2. Specify filename via dmenu
 
 Requires the =i3ipc-python= package and =ffmpeg=. 
+
+** i3blocks 
+The i3blocks folder contains scripts I use to render my i3 modeline
+[[file:images/i3bar.png]]
+*** system_monitor.py  
+Outputs:  
+- Disk Usage 
+- Memory Usage 
+- Max Processor Utilisation
+- Average Processor Utilisation
+- Battery Status
+
+#+begin_src ini 
+[comp_status]
+command=/path/to/system_monitor.py
+interval=1
+markup=pango
+color=#FFFFFF
+#+end_src
+
+Requires =mpstat=, =Font Awesome 5=. 
+*** mpc_title.py 
+Renders currently playing song title as a marquee scroll 
+
+#+begin_src ini
+[mpc_title]
+full_text=" <span font='8'>                    </span>"
+command=/home/user/scripts/i3blocks/mpc_title.py 20
+interval=persist
+markup=pango
+#+end_src
+
+Requires =mpd=.
+
+*** volume_slider.py 
+Renders interactive volume slider out of unicode box fill characters 
+
+#+begin_src ini
+[volume-slider]
+command=/home/user/scripts/i3blocks/volume_slider.py 30
+interval=1
+markup=pango
+#+end_src
+
+Requires =amixer=. 
+
+*** mpc_toggle, volume_toggle.py 
+Toggle mpd playback and alsa master volume respectively. 
+
+#+begin_src ini
+[mpc_toggle]
+command=/home/user/scripts/i3blocks/mpc_toggle.py 
+interval=once
+color=#EEEEEE
+
+[mute]
+command=/home/user/scratch/i3blocks/volume_toggle.py
+interval=once
+color=#AFAFAF
+#+end_src
+
+Require =Font Awesome 5=. 
