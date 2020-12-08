@@ -61,6 +61,23 @@ color=#FFFFFF
 #+end_src
 
 Requires =mpstat=, =Font Awesome 5=. 
+*** network_monitor.py 
+Displays up and download rates on specific interface, with color highlighting. 
+
+There are 3 variables in the script that need to be set 
+- =RX_MAX= : "Maximum" download speed (in Bytes/s) 
+- =TX_MAX= : "Maximum" upload speed (in Bytes/s)
+- =INTERFACE= : Interface to track
+
+#+begin_src ini 
+[network_monitor]
+min_width="<span font='Font Awesome Heavy'>&#xf106;</span><span foreground='#3e3e3e'>·82B</span> <span font='Font Awesome Heavy'>&#xf107;</span><span foreground='#484848'>372B</span>"
+command=/home/user/scripts/i3blocks/network_monitor.py
+interval=persist
+markup=pango
+color=#FFFFFF
+#+end_src
+Requires =ifstat=. 
 *** mpc_title.py 
 Renders currently playing song title as a marquee scroll 
 
@@ -74,6 +91,23 @@ markup=pango
 
 Requires =mpd=.
 
+*** mpc_select.py 
+Button to select mpd playlists or songs via dmenu.  
+
+Mouse Button Mappings
+- =Button 1=: Replace current playlist with selected playlist 
+- =Button 2=: Append selected playlist to current playlist 
+- =Button 3=: Select song and play it 
+
+/Note: As this script fetches a clientside representation of mpds song database to pipe into dmenu, it may struggle with large music databases/
+
+#+begin_src ini 
+[mpc_playlist]
+full_text=""
+command=/home/user/scripts/i3blocks/mpc_select.py 
+#+end_src
+
+Requires =mpd=, =dmenu=. 
 *** volume_slider.py 
 Renders interactive volume slider out of unicode box fill characters 
 

@@ -4,6 +4,18 @@ color=#AAAAAA
 separator=false
 separator_block_width=3
 
+
+[sep]
+
+[network_monitor]
+min_width="<span font='Font Awesome Heavy'>&#xf106;</span><span foreground='#3e3e3e'>·82B</span> <span font='Font Awesome Heavy'>&#xf107;</span><span foreground='#484848'>372B</span>"
+command=/home/user/scripts/i3blocks/network_monitor.py
+interval=persist
+markup=pango
+color=#FFFFFF
+
+[sep]
+
 [comp_status]
 command=/home/user/scripts/i3blocks/system_monitor.py
 interval=1
@@ -33,6 +45,10 @@ color=#EEEEEE
 full_text=""
 command=mpc next -q
 color=#EEEEEE
+
+[mpc_playlist]
+full_text=""
+command=/home/user/scripts/i3blocks/mpc_select.py 
 
 [mpc_title]
 full_text=" <span font='8'>                    </span>"
