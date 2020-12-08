@@ -14,7 +14,7 @@ def scroll_song(length, speed=0.4):
     """
     # Get initial title from mpc 
     mpc = subprocess.check_output(["mpc", "current"]) 
-    title = Path(mpc.decode()).stem
+    title = Path(mpc.decode()).stem + " "
 
     # mpc call constructor 
     query = lambda: subprocess.Popen(["mpc", "current", "--wait"],
@@ -26,12 +26,17 @@ def scroll_song(length, speed=0.4):
         # check if mpc call has exited, set title if yes
         while "[paused]" in subprocess.check_output(["mpc"]).decode():
             time.sleep(1)
+
         if mpc.poll() == 0:
-            title = Path(mpc.stdout.read().decode()).stem
+            title = Path(mpc.stdout.read().decode()).stem + " "
             mpc = query()
             i = 0
             color = "#FFFFFF" 
 
+        if not title:
+            time.sleep(1)
+            continue
+        
         # title fits 
         if length >= len(title):
             print(" <span font='8'>", 
